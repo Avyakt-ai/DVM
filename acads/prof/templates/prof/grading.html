@@ -1,0 +1,15 @@
+{% extends 'prof/prof_base.html' %}
+{% block title %}Add Course{% endblock %}
+{% block content %}
+{% load static %}
+<div class="container">
+    <div class="card shadow">
+        <div class="card-body">
+            <h1 class="card-title">Select The Student To Grade</h1>
+            {% for student in students %}
+            <p><a href="{% url 'course_grade' student.id %}" class="btn btn-primary">{{student}}</a></p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

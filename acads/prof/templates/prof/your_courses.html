@@ -1,0 +1,40 @@
+{% extends 'prof/prof_base.html' %}
+{% block title %}Staff{% endblock %}
+{% block content %}
+{% load static %}
+<div class="container">
+    {% if course %}
+    <div class="card shadow">
+        <div class="card-body">
+            <h1 class="card-title text-center">{{course.name}}</h1>
+            <p class="card-text"><strong>IC: {{course.ic}}</strong></p>
+            <p class="card-text"><strong>Units: {{course.units}}</strong></p>
+        </div>
+    </div>
+    <br>
+    <div class="card shadow">
+        <div class="card-body">
+            <h2 class="card-title">Enrolled Students</h2>
+            {% for i in students %}
+            <p class="card-text">{{i.student.user}}</p>
+            {% endfor %}
+        </div>
+    </div>
+    <br>
+    <div class="card shadow">
+        <div class="card-body">
+            <h1 class="card-title">Add Student to Course - {{ course.name }}</h1>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary btn-block">Enroll Student</button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning text-center" role="alert">
+        <h2>You are not IC of any course, Contact Administration.</h2>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

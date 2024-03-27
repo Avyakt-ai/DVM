@@ -1,0 +1,10 @@
+{% extends 'student/base.html' %}
+{% block title %}Student{% endblock %}
+{% block content %}
+{% load static %}
+{% for eval in evals %}
+<h2>Eval: {{eval.eval.course.name}}</h2>
+<p>Grade(out of 10): {{eval.grade}}</p>
+{% endfor %}
+<a href="{% url 'generate_pdf' %}" class="btn btn-primary">Download Grades PDF</a>
+{% endblock %}

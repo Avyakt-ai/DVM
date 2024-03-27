@@ -1,0 +1,23 @@
+{% extends 'prof/prof_base.html' %}
+{% block title %}Add Course{% endblock %}
+{% block content %}
+{% load static %}
+<div class="container">
+    {% if course %}
+    <div class="card shadow">
+        <div class="card-body">
+            <h1 class="card-title text-center">Create Announcement</h1>
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary btn-block">Create Announcement</button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning text-center" role="alert">
+        <h2>You are not IC of any course, Contact Administration.</h2>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

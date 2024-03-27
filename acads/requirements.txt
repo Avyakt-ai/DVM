@@ -1,0 +1,9 @@
+Django==4.2.7
+django-allauth
+social-auth-app-django
+mailjet_rest
+reportlab
+django-excel
+openpyxl
+psycopg2-binary
+gunicorn

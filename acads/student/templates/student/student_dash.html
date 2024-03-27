@@ -1,0 +1,99 @@
+{% extends 'student/base.html' %}
+{% block title %}Student{% endblock %}
+{% block content %}
+{% load static %}
+<style>
+    .jumbotron {
+        background-size: cover;
+        color: #000409;
+        text-align: center;
+        padding: 100px 0;
+    }
+
+    .product-card {
+        background-color: #fff;
+        border-radius: 7px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        padding: 7px;
+        margin-bottom: 15px;
+    }
+
+    .product-card p {
+        font-size: 14px; /* Adjust the font size of the product description */
+        margin-bottom: 3px; /* Adjust the bottom margin of the product description */
+    }
+
+    .product-card:hover {
+        background: linear-gradient(135deg, #091cec, #feb47b);
+        color: white;
+    }
+
+    .col-md-4 a {
+        color: black; /* Use the same color as the parent element */
+        text-decoration: none; /* Remove underline */
+    }
+
+    .blurry-bg {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background-image: url('media/default_product_img.png'); /* Replace with your background image */
+        background-size: cover;
+        filter: blur(10px);
+        opacity: 0;
+        transition: opacity 0.5s ease;
+    }
+
+    .product-image img {
+        max-width: 100%; /* Ensure the image does not exceed the container width */
+        height: auto; /* Allow the image to maintain its aspect ratio */
+        display: block; /* Ensure the image is displayed as a block element */
+        margin: 0 auto; /* Center the image horizontally within the container */
+        border-radius: 7px;
+    }
+</style>
+
+<!-- Jumbotron -->
+<div class="jumbotron">
+    <h1 class="display-4">Welcome to Acads by DVM</h1>
+</div>
+
+<div class="container">
+    <div class="row">
+        {% for course in enrolled_courses %}
+        <div class="col-md-4">
+            <a href="{% url 'course_detail' course.course.id %}">
+                <div class="product-card">
+                    <div class="product-image">
+                        <img src="{{ course.course.image.url }}" alt="{{ course.course }}">
+                    </div>
+                    <h2>{{course.course.name}}</h2>
+                    <p>{{course.course}}</p>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<br>
+<br>
+<br>
+
+<!-- Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+<script>
+    $(document).ready(function () {
+        $(window).scroll(function () {
+            var scrollTop = $(window).scrollTop();
+            $('.blurry-bg').css('opacity', scrollTop / 500); // Adjust the division factor to control the opacity change speed
+        });
+    });
+</script>
+{% endblock %}

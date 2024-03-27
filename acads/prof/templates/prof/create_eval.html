@@ -1,0 +1,52 @@
+{% extends 'prof/prof_base.html' %}
+{% block title %}Add Eval{% endblock %}
+{% block content %}
+{% load static %}
+<div class="container">
+    {% if course %}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h1 class="card-title">Existing Evals</h1>
+                    {% for eval in existing_evals %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h2 class="card-title">{{eval.course}}</h2>
+                            <p class="card-text"><strong>{{eval.date}}</strong></p>
+                            <a href="{% url 'create_grade' eval.id %}" class="btn btn-primary">Mark Grade</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h1 class="card-title">Create Evaluative</h1>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary btn-block">Create Evaluative</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h1 class="card-title">Create CDC</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-warning text-center" role="alert">
+        <h2>You are not IC of any course, Contact Administration.</h2>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

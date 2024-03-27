@@ -1,0 +1,26 @@
+{% extends 'prof/prof_base.html' %}
+{% block title %}Grade Student{% endblock %}
+{% block content %}
+{% load static %}
+<h1>Grade for {{ student }}</h1>
+<form method="POST">
+    {% csrf_token %}
+    <table>
+        <thead>
+        <tr>
+            <th>Course</th>
+            <th>Grade</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for course in courses %}
+        <tr>
+            <td>{{ course.course.uid }}</td>
+            <td><input type="number" name="grade_{{ course.id }}" value="{{ course.grade }}"></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit">Submit Grades</button>
+</form>
+{% endblock %}
