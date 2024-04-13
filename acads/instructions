@@ -1,0 +1,9 @@
+1. take down the containers
+2. Spin up the containers
+3. migrate command
+4. collectstatic command
+5. createsuperuser
+6. create group "prof"
+7. create site and then create socialapplication on django admin
+8. create departments so that you can register prof and students.
+9.

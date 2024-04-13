@@ -31,7 +31,7 @@ def not_authorized(request):
 
 def type_of_user(request):
     if request.user.is_authenticated:
-        messages.success(request, f'You have been logged out of your account. Login In Again!')
+        messages.success(request, 'You have been logged out of your account. Login In Again!')
         logout(request)
     return render(request, 'student/type_of_user.html')
 
@@ -50,7 +50,7 @@ def student_register(request):
 
 def student_login(request):
     if request.user.is_authenticated:
-        messages.success(request, f'You have been logged out of your account. Login In Again!')
+        messages.success(request, 'You have been logged out of your account. Login In Again!')
         logout(request)
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -131,7 +131,7 @@ def unregister_course(request, course_id):
         return redirect('course_registration')
 
 
-def add_cdc(request):
+def add_all_cdc(request):
     cdc_courses = CDC.objects.filter(dept=request.user.student.department, sem=request.user.student.sem)
     already_enrolled = CourseEnrollment.objects.filter(student=request.user.student, sem=request.user.student.sem)
     already_enrolled_course_ids = already_enrolled.values_list('course__id', flat=True)
@@ -164,9 +164,12 @@ def select_department(request):
 def course_detail(request, course_id):
     # Retrieve the course object from the database based on the provided course_id
     course = get_object_or_404(Course, id=course_id)
+    course_enrollments = CourseEnrollment.objects.get(student=request.user.student, course=course)
+
     announcements = Announcement.objects.filter(course=course)
     return render(request, 'student/course_detail.html', {
         'course': course,
+        'course_enrollments': course_enrollments,
         'announcements': announcements,
     })
 
@@ -189,8 +192,12 @@ def generate_pdf(request):
     for i in course_enrollments:
         if i.grade:
             student_units += i.grade * i.course.units
+        if i.course.units:
             total_units += i.course.units
-    cgpa = student_units / total_units
+    if total_units == 0:
+        cgpa = 0
+    else:
+        cgpa = student_units / total_units
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = 'attachment; filename="grades.pdf"'

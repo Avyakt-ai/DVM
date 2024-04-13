@@ -4,11 +4,29 @@ from django.utils import timezone
 from django.core.validators import MinValueValidator, MaxValueValidator
 
 
-
 class Registration(models.Model):
     register = models.BooleanField(default=False)
 
 
+# class AcadDept(models.Model):
+#     class TypeChoice(models.TextChoices):
+#         BIO_SCI = 'Biological Sciences'
+#         CHEM_ENG = 'Chemical Engineering'
+#         CHEM = 'Chemistry'
+#         CIVIL = 'Civil Engineering'
+#         CS_IS = 'Computer Science & Information System'
+#         ECON = 'Economics & Finance'
+#         EEE = 'Electrical & Electronics Engineering'
+#         HUMANITIES = 'Humanities and Social Sciences'
+#         MATH = 'Mathematics'
+#         MANAGEMENT = 'Management'
+#         MECH = 'Mechanical Engineering'
+#         PHARMA = 'Pharmacy'
+#         PHY = 'Physics'
+#     acad_dept = models.CharField(max_length=50, choices=TypeChoice.choices)
+
+
+# Well the below is more like branch it is just named Dept
 class Dept(models.Model):
     class TypeChoices(models.TextChoices):
         BE_CHEMICAL = 'A1' 'B.E. Chemical'

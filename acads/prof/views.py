@@ -3,8 +3,8 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import user_passes_test
-from .forms import CourseForm, StudentEnrollmentForm, AnnouncementForm, EvalForm, UserRegisterForm
-from student.models import Course, Student, CourseEnrollment, Announcement, Professor, Evaluative, EvalGrade
+from .forms import CourseForm, StudentEnrollmentForm, AnnouncementForm, EvalForm, UserRegisterForm, CdcForm, BulkCdcForm
+from student.models import Course, Student, CourseEnrollment, Announcement, Professor, Evaluative, EvalGrade, Dept, CDC
 from mailjet_rest import Client
 import base64
 from django.contrib.auth.models import Group
@@ -23,7 +23,7 @@ def not_authorized(request):
 
 def prof_login(request):
     if request.user.is_authenticated:
-        messages.success(request, f'You have been logged out of your account. Login In Again!')
+        messages.success(request, "You have been logged out of your account. Login In Again!")
         logout(request)
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -68,11 +68,25 @@ def add_course(request):
         form = CourseForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            messages.success(request, f'New course added!!')
+            messages.success(request, 'New course added!!')
             return redirect('prof_dash')  # Redirect to the dashboard or any other desired page
     else:
         form = CourseForm()
     return render(request, 'prof/add_course.html', {'form': form})
+
+
+@user_passes_test(is_prof, login_url='not_authorized')
+def add_cdc(request):
+    bulk_form = BulkCdcForm()
+    if request.method == 'POST':
+        form = CdcForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'New CDC added!!')
+            return redirect('add_cdc')
+    else:
+        form = CdcForm()
+    return render(request, 'prof/add_cdc.html', {'form': form, 'bulk_form': bulk_form})
 
 
 @user_passes_test(is_prof, login_url='not_authorized')
@@ -96,7 +110,7 @@ def your_courses(request):
                 enrollment.save()
                 messages.success(request, f'Successfully registered {student.user} for the Course')
             else:
-                messages.success(request, f'Student is already registered for the Course')
+                messages.success(request, 'Student is already registered for the Course')
             return redirect('your_courses')
     else:
         form = StudentEnrollmentForm()
@@ -190,7 +204,7 @@ def create_announcement(request):
                     # print(result.json())
                 else:
                     print(student, "has no email")
-            messages.success(request, f'Announcement was sent successfully')
+            messages.success(request, 'Announcement was sent successfully')
             return redirect('prof_dash')  # Redirect to the dashboard or any other desired page
     else:
         form = AnnouncementForm()
@@ -262,7 +276,7 @@ def create_eval(request):
                 else:
                     print(student, "has no email")
 
-            messages.success(request, f'Evaluative was created successfully')
+            messages.success(request, 'Evaluative was created successfully')
             return redirect('prof_dash')  # Redirect to the dashboard or any other desired page
     else:
         form = EvalForm()
@@ -285,6 +299,7 @@ def create_grade(request, eval_id):
             if grade_field_name in request.POST:
                 student.grade = request.POST[grade_field_name]
                 student.save()
+                messages.success(request, f'{student} has been graded')
         return redirect('create_evaluative')
 
     return render(request, 'prof/create_grade.html', {'evaluative': evaluative, 'students': students})
@@ -302,13 +317,35 @@ def course_grade(request, student_id):
                 if request.POST[grade_field_name]:
                     course.grade = request.POST[grade_field_name]
                     course.save()
+        return redirect('grading')
     return render(request, 'prof/course_grade.html', {'student': student, 'courses': courses})
 
 
 @user_passes_test(is_prof, login_url='not_authorized')
 def course_stu(request):
-    course = Course.objects.get(ic=request.user)
-    students = Student.objects.filter(course=course)
+    try:
+        course = Course.objects.get(ic=request.user)
+        students = Student.objects.filter(course=course)
+    except Course.DoesNotExist:
+        course = None
+        students = None
     return render(request, 'prof/grading.html', {
         'students': students,
+        'courses': course,
     })
+
+
+def add_bulk_cdc(request):
+    if request.method == 'POST':
+        form = BulkCdcForm(request.POST)
+        if form.is_valid():
+            dept_group = form.cleaned_data['dept_group']
+            course = form.cleaned_data['course']
+            sem = form.cleaned_data['sem']
+            departments_a = Dept.objects.filter(dept__startswith=dept_group)
+            # Add CDC for each department and semester 1
+            for department in departments_a:
+                cdc_entry = CDC.objects.create(dept=department, course=course, sem=sem)
+                cdc_entry.save()
+            messages.success(request, f'CDC for group {dept_group} for course {course.uid} has been added successfully!')
+    return redirect('add_cdc')

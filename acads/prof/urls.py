@@ -13,4 +13,6 @@ urlpatterns = [
     path('eval-grade/<int:eval_id>/', views.create_grade, name='create_grade'),
     path('course-grade/<int:student_id>/', views.course_grade, name='course_grade'),
     path('grading/', views.course_stu, name='grading'),
+    path('add_cdc/', views.add_cdc, name='add_cdc'),
+    path('add_bulk_cdc/', views.add_bulk_cdc, name='add_bulk_cdc'),
 ]

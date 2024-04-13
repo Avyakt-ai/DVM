@@ -2,9 +2,16 @@
 {% block title %}Student{% endblock %}
 {% block content %}
 {% load static %}
-{% for eval in evals %}
-<h2>Eval: {{eval.eval.course.name}}</h2>
-<p>Grade(out of 10): {{eval.grade}}</p>
-{% endfor %}
-<a href="{% url 'generate_pdf' %}" class="btn btn-primary">Download Grades PDF</a>
+<div class="container">
+    {% for eval in evals %}
+    <div class="card shadow">
+        <div class="card-body">
+            <h2 class="card-title">Eval: {{eval.eval.course.name}}</h2>
+            <p class="card-text">Grade(out of 10): {{eval.grade}}</p>
+        </div>
+    </div>
+    <br>
+    {% endfor %}
+    <a href="{% url 'generate_pdf' %}" class="btn btn-primary">Download Grades PDF</a>
+</div>
 {% endblock %}

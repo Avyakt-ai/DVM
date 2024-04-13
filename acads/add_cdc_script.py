@@ -3,12 +3,11 @@
 
 import os
 import django
+from student.models import Dept, CDC, Course
 
 # Set up Django environment
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'acads.settings')
 django.setup()
-
-from student.models import Dept, CDC, Course
 
 
 def add_cdc():
@@ -18,7 +17,9 @@ def add_cdc():
     # Add CDC for each department and semester 1
     for department in departments_a:
         cdc_entry = CDC.objects.create(dept=department, course=course, sem=2)
+        cdc_entry.save()
     print(f"Done for {course} for one group")
+
 
 if __name__ == "__main__":
     add_cdc()

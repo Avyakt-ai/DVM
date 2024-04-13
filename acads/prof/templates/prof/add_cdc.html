@@ -1,0 +1,33 @@
+{% extends 'prof/prof_base.html' %}
+{% block title %}Add CDC{% endblock %}
+{% block content %}
+{% load static %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h1 class="card-title text-center mb-4">Add CDC</h1>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-primary btn-block">Add CDC</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h1 class="card-title text-center mb-4">Add Multiple CDC</h1>
+                    <form method="post" enctype="multipart/form-data" action="{% url 'add_bulk_cdc' %}">
+                        {% csrf_token %}
+                        {{ bulk_form.as_p }}
+                        <button type="submit" class="btn btn-primary btn-block">Add All CDC</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

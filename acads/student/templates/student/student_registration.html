@@ -2,79 +2,76 @@
 {% block title %}Registration{% endblock %}
 {% block content %}
 {% load static %}
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-<div class="row">
-    <div class="col-6">
-        <h2>Enrolled Courses</h2>
-        <p><strong>Current units: {{current_units}}</strong></p>
-        <p><strong>Required units: {{required_units}}</strong></p>
-        <ul>
-            {% if enrolled_courses %}
-            {% for enrollment in enrolled_courses %}
-            <li>
-                {{ enrollment.course.name }}
-                <form method="post" action="{% url 'unregister_course' enrollment.course.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Unregister</button>
-                </form>
-            </li>
-            {% endfor %}
-            {% else %}
-            <p>You have not been enrolled in any courses</p>
-            {% endif %}
-        </ul>
-        {% if not disable_registration %}
-        <h2>Courses Available For This Semester</h2>
-        <ul>
-            {% if available_courses %}
-            {% for course in available_courses %}
-            <li>
-                {{ course.name }}
-                <form method="post" action="{% url 'register_course' course.id %}">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-primary">Register</button>
-                </form>
-            </li>
-            {% endfor %}
-            {% else %}
-            <p>No courses available</p>
-            {% endif %}
-        </ul>
-        {% else %}
-        <p><strong>You are exceeding your maximum unit for this semester.</strong></p>
-        <p>Please unregister from other courses to select further courses.</p>
-        {% endif %}
-    </div>
-    <div class="col-6">
-        <h2>CDC Courses for this Semester</h2>
-        <ul>
-            {% for a in cdc_list %}
-            <li>
-                {{ a.course.name }}
-            </li>
-        </ul>
-        {% endfor %}
-        <br>
-        <form method="post" action="{% url 'add_cdc' %}">
-            {% csrf_token %}
-            <button type="submit"
-                    onclick="return confirm('You will be automatically enrolled in all of your Compulsory Disciplinary Courses.')"
-                    class="btn btn-primary">Add All CDC
-            </button>
-        </form>
-        <br>
-        <h2>Instructions</h2>
-        <p><strong>First select All CDC courses then select other electives and extra courses.</strong></p>
-        <a href="{% url 'student_dashboard' %}">
-        <button
-                class="btn btn-primary">SAVE
-        </button>
-        </a>
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title">Enrolled Courses</h2>
+                    <p><strong>Current units: {{current_units}}</strong></p>
+                    <p><strong>Required units: {{required_units}}</strong></p>
+                    <ul class="list-group">
+                        {% if enrolled_courses %}
+                        {% for enrollment in enrolled_courses %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ enrollment.course.name }}
+                            <form method="post" action="{% url 'unregister_course' enrollment.course.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger">Unregister</button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                        {% else %}
+                        <p class="card-text">You have not been enrolled in any courses</p>
+                        {% endif %}
+                    </ul>
+                    {% if not disable_registration %}
+                    <h2 class="card-title mt-4">Courses Available For This Semester</h2>
+                    <ul class="list-group">
+                        {% if available_courses %}
+                        {% for course in available_courses %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ course.name }}
+                            <form method="post" action="{% url 'register_course' course.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-success">Register</button>
+                            </form>
+                        </li>
+                        {% endfor %}
+                        {% else %}
+                        <p class="card-text">No courses available</p>
+                        {% endif %}
+                    </ul>
+                    {% else %}
+                    <p class="card-text"><strong>You are exceeding your maximum unit for this semester.</strong></p>
+                    <p class="card-text">Please unregister from other courses to select further courses.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title">CDC Courses for this Semester</h2>
+                    <ul class="list-group">
+                        {% for a in cdc_list %}
+                        <li class="list-group-item">{{ a.course.name }}</li>
+                        {% endfor %}
+                    </ul>
+                    <form method="post" action="{% url 'add_all_cdc' %}">
+                        {% csrf_token %}
+                        <button type="submit"
+                                onclick="return confirm('You will be automatically enrolled in all of your Compulsory Disciplinary Courses.')"
+                                class="btn btn-primary mt-3">Add All CDC
+                        </button>
+                    </form>
+                    <h2 class="card-title mt-4">Instructions</h2>
+                    <p><strong>First select All CDC courses then select other electives and extra courses.</strong></p>
+                    <p><strong>You can just click the above "Add All CDC" button to register in all the CDC of your Branch.</strong></p>
+                    <a href="{% url 'student_dashboard' %}" class="btn btn-primary">SAVE</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<br>
-<br>
-<br>
 {% endblock %}

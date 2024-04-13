@@ -3,6 +3,7 @@
 {% block content %}
 {% load static %}
 <div class="container">
+    {% if courses %}
     <div class="card shadow">
         <div class="card-body">
             <h1 class="card-title">Select The Student To Grade</h1>
@@ -11,5 +12,10 @@
             {% endfor %}
         </div>
     </div>
+    {% else %}
+    <div class="alert alert-warning text-center" role="alert">
+        <h2>You are not IC of any course, Contact Administration.</h2>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}
