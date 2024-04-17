@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from django.contrib.auth.decorators import user_passes_test
-from .models import Course, CourseEnrollment, CDC, Announcement, Evaluative, EvalGrade
+from .models import Course, CourseEnrollment, CDC, Announcement, Evaluative, EvalGrade, Student
 from .forms import DepartmentSelectionForm, UserRegisterForm
 from reportlab.pdfgen import canvas
 
@@ -87,7 +87,17 @@ def course_registration(request):
     # Filter available courses by excluding enrolled courses
     available_courses = all_courses.exclude(id__in=enrolled_courses)
     current_units = 0
-    required_units = 19
+    dept = request.user.student.department
+    if dept.dept.startswith('A'):
+        if request.user.student.sem == 1:
+            required_units = 20
+        else:
+            required_units = 17
+    else:
+        if request.user.student.sem == 1:
+            required_units = 19
+        else:
+            required_units = 18
     enrolled_courses = CourseEnrollment.objects.filter(student=request.user.student, sem=request.user.student.sem, grade=None)
     for c in enrolled_courses:
         current_units += c.course.units

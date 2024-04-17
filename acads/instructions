@@ -6,4 +6,9 @@
 6. create group "prof"
 7. create site and then create socialapplication on django admin
 8. create departments so that you can register prof and students.
-9.
+
+For Deploying,
+1. Install Docker on server
+2. git clone the project
+3. add the ip to allowed host at .env.dev
+4.
