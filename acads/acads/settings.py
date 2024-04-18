@@ -146,7 +146,7 @@ USE_I18N = True
 
 USE_TZ = True
 
-CSRF_TRUSTED_ORIGINS = ["http://localhost:1337"]
+CSRF_TRUSTED_ORIGINS = ['http://143.110.184.5:1337', 'https://143.110.184.5:1337', 'https://143.110.184.5', 'http://localhost:1337']
 
 
 # Static files (CSS, JavaScript, Images)
