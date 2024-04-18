@@ -1,22 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from django.contrib.auth.decorators import user_passes_test
 from .models import Course, CourseEnrollment, CDC, Announcement, Evaluative, EvalGrade, Student
 from .forms import DepartmentSelectionForm, UserRegisterForm
 from reportlab.pdfgen import canvas
-
-from datetime import datetime
-from django.urls import reverse
 from django.shortcuts import redirect, get_object_or_404
-from datetime import timedelta
-from django.utils.timezone import make_aware
-from django.forms import formset_factory
 from django.http import HttpResponse
-import base64
 
 
 def is_stud(user):
