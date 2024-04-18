@@ -79,6 +79,7 @@ def course_registration(request):
     available_courses = all_courses.exclude(id__in=enrolled_courses)
     current_units = 0
     dept = request.user.student.department
+    required_units = 0
     if dept.dept.startswith('A'):
         if request.user.student.sem == 1:
             required_units = 20
@@ -119,13 +120,14 @@ def course_registration(request):
             required_units = 5
     else:
         required_units = 37
-
     enrolled_courses = CourseEnrollment.objects.filter(student=request.user.student, sem=request.user.student.sem, grade=None)
     for c in enrolled_courses:
         current_units += c.course.units
-    disable_registration = False
-    if current_units >= required_units:
-        disable_registration = True
+    disable_registration = 0
+    if current_units > required_units:
+        disable_registration = 1
+    elif current_units == required_units:
+        disable_registration = 2
     return render(request, 'student/student_registration.html', {
         'available_courses': available_courses,
         'enrolled_courses': enrolled_courses,
