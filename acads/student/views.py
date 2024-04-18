@@ -82,13 +82,44 @@ def course_registration(request):
     if dept.dept.startswith('A'):
         if request.user.student.sem == 1:
             required_units = 20
-        else:
+        elif request.user.student.sem == 2:
             required_units = 17
-    else:
+        elif request.user.student.sem == 3:
+            required_units = 20
+        elif request.user.student.sem == 4:
+            required_units = 20
+        elif request.user.student.sem == 5:
+            required_units = 17
+        elif request.user.student.sem == 6:
+            required_units = 21
+        elif request.user.student.sem == 7:
+            required_units = 18
+        elif request.user.student.sem == 8:
+            required_units = 25
+    elif dept.dept.startswith('B'):
         if request.user.student.sem == 1:
             required_units = 19
-        else:
+        elif request.user.student.sem == 2:
             required_units = 18
+        elif request.user.student.sem == 3:
+            required_units = 17
+        elif request.user.student.sem == 4:
+            required_units = 20
+        elif request.user.student.sem == 5:
+            required_units = 21
+        elif request.user.student.sem == 6:
+            required_units = 21
+        elif request.user.student.sem == 7:
+            required_units = 30
+        elif request.user.student.sem == 8:
+            required_units = 5
+        elif request.user.student.sem == 9:
+            required_units = 5
+        elif request.user.student.sem == 10:
+            required_units = 5
+    else:
+        required_units = 37
+
     enrolled_courses = CourseEnrollment.objects.filter(student=request.user.student, sem=request.user.student.sem, grade=None)
     for c in enrolled_courses:
         current_units += c.course.units
