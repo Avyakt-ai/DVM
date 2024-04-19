@@ -121,3 +121,6 @@ class EvalGrade(models.Model):
     eval = models.ForeignKey(Evaluative, on_delete=models.CASCADE)
     student = models.ForeignKey(Student, on_delete=models.CASCADE)
     grade = models.FloatField(null=True, validators=[MinValueValidator(0), MaxValueValidator(10)])
+
+    def __str__(self):
+        return f"{self.student} in {self.eval.course.uid}"
