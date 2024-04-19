@@ -71,7 +71,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',
 ]
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 
 ROOT_URLCONF = 'acads.urls'
 
