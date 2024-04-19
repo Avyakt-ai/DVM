@@ -158,7 +158,7 @@ def unregister_course(request, course_id):
         # Get the current student
         student = request.user.student
         # Enroll the student in the course
-        enrollment = CourseEnrollment.objects.get(student=student, course=course, sem=request.user.student.sem)
+        enrollment = CourseEnrollment.objects.get(student=student, course=course)
         enrollment.delete()
         return redirect('course_registration')
     else:
@@ -171,7 +171,7 @@ def add_all_cdc(request):
     already_enrolled_course_ids = already_enrolled.values_list('course__id', flat=True)
     for c in cdc_courses:
         if c.course.id not in already_enrolled_course_ids:
-            CourseEnrollment.objects.create(student=request.user.student, course=c.course)
+            CourseEnrollment.objects.create(student=request.user.student, course=c.course, sem=request.user.student.sem)
     request.user.student.cdc_added = True
     request.user.student.save()
     messages.success(request, f'You Have been enrolled for all the cdc for department {request.user.student.department} for semester {request.user.student.sem}')
