@@ -145,7 +145,7 @@ def register_course(request, course_id):
         # Get the current student
         student = request.user.student
         # Enroll the student in the course
-        CourseEnrollment.objects.create(student=student, course=course)
+        CourseEnrollment.objects.create(student=student, course=course, sem=request.user.student.sem)
         return redirect('course_registration')
     else:
         return redirect('course_registration')
@@ -158,7 +158,7 @@ def unregister_course(request, course_id):
         # Get the current student
         student = request.user.student
         # Enroll the student in the course
-        enrollment = CourseEnrollment.objects.get(student=student, course=course)
+        enrollment = CourseEnrollment.objects.get(student=student, course=course, sem=request.user.student.sem)
         enrollment.delete()
         return redirect('course_registration')
     else:
