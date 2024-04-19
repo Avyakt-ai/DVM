@@ -242,7 +242,29 @@ def generate_pdf(request):
     pdf.drawString(200, 800, 'Grades Report')
     y_position = 760
     for enrollment in course_enrollments:
-        pdf.drawString(100, y_position, f"Course: {enrollment.course.name}, Grade: {enrollment.grade}")
+        grading = ""
+        if enrollment.grade:
+            if enrollment.grade >= 9:
+                grading = 'A'
+            elif 9 > enrollment.grade >= 8:
+                grading = 'A-'
+            elif 8 > enrollment.grade >= 7:
+                grading = 'B'
+            elif 7 > enrollment.grade >= 6:
+                grading = 'B-'
+            elif 6 > enrollment.grade >= 5:
+                grading = 'C'
+            elif 5 > enrollment.grade >= 4:
+                grading = 'C-'
+            elif 4 > enrollment.grade >= 3:
+                grading = 'D'
+            elif 3 > enrollment.grade >= 2:
+                grading = 'I'
+            elif 2 > enrollment.grade:
+                grading = 'NC'
+            else:
+                grading = "Not Defined"
+        pdf.drawString(100, y_position, f"Course: {enrollment.course.name}, Grade: {grading}")
         y_position -= 20
     pdf.drawString(100, 400, f"CGPA: {cgpa}")
     pdf.save()
